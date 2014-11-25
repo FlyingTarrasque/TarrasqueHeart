@@ -1,6 +1,10 @@
+=================
+Hear of Tarrasque
+=================
 # Info
 
-Lightwight MVC framework for groovy
+Build this item and dont fear any gank!!
 
 ## Usage
+
 gradle jettyRun
