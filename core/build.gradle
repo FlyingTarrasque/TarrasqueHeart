@@ -1,0 +1,25 @@
+apply plugin: 'groovy'
+ 
+version = '0.1'
+ 
+//create a single Jar with all dependencies
+task tarrasqueJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': '',  
+      	'Implementation-Version': version
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+ 
+//Get dependencies from Maven central repository
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  providedCompile 'javax.servlet:servlet-api:2.5'
+  compile 'org.codehaus.groovy:groovy-all:2.2.0'
+  compile 'log4j:log4j:1.2.17'
+}
