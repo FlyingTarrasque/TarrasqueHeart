@@ -1,16 +1,33 @@
 apply plugin: 'groovy'
+apply plugin: 'maven'
  
 version = '0.1'
- 
-//create a single Jar with all dependencies
-task tarrasqueJar(type: Jar) {
-	manifest {
-        attributes 'Implementation-Title': '',  
-      	'Implementation-Version': version
+
+final sample    = '../sample'
+final sampleLib = "${sample}/src/main/webapp/WEB-INF/lib"
+
+sourceSets {
+  main {
+    groovy {
+      srcDir 'src'
     }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+  }
+}
+ 
+jar {
+  baseName 'tarrasque'
+  manifest {
+      attributes 'Implementation-Title': 'Tarrasque', 'Implementation-Version': version
+  }
+  metaInf { from 'src/main/META-INF' }
+}
+
+task sampleJar(dependsOn: [jar]) {
+  description = 'Updating the Tarrasque JAR'
+
+  doFirst {
+    ant.copy file: jar.archivePath, todir: sampleLib
+  }
 }
  
 //Get dependencies from Maven central repository
@@ -19,7 +36,7 @@ repositories {
 }
 
 dependencies {
-  providedCompile 'javax.servlet:servlet-api:2.5'
+  compile 'javax.servlet:servlet-api:2.5'
   compile 'org.codehaus.groovy:groovy-all:2.2.0'
   compile 'log4j:log4j:1.2.17'
 }

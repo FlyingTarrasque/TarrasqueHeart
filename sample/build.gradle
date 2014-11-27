@@ -1,0 +1,17 @@
+apply plugin: 'groovy'
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+version = '0.1'
+
+repositories {
+  mavenCentral()
+  mavenLocal()
+}
+
+dependencies {
+  providedCompile 'javax.servlet:servlet-api:2.5'
+  compile 'org.codehaus.groovy:groovy-all:2.3.6'
+  compile 'log4j:log4j:1.2.17'
+  compile files("./wrapper/tarrasque-#{version}.jar")
+}

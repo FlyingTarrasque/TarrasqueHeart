@@ -1,3 +1,5 @@
 .DS_Store
 .gradle
 core/build
+sample/build
+sample/src/wrapper
