@@ -1,7 +1,7 @@
 package groovy.tarrasque
 
 import groovy.transform.CompileStatic
-import static groovy.io.FileType.FILES
+import static groovy.io.FileType.*
 
 class TarrasqueScript{
 	static public actions = [:]
@@ -14,12 +14,13 @@ class TarrasqueScript{
 
 	void buildActions(scriptsPath){
 		println "Root path: $scriptsPath"
-		def dir = new File(scriptsPath)
+		def dir = new File(scriptsPath).getParentFile()
 		dir.eachDirRecurse() { subDir ->
-			subDir.eachFileMatch(~/.*.groovy/) { file ->  
-				if(file.exists()){
-					println "Iniciando o script $file.path"
-					gse.run(file.path, getNewBinding());	
+			println "Folder: $subDir.path"
+			subDir.eachFile{ file ->  
+				if(file.exists() && file.path.endsWith(".groovy")){
+					println "Iniciando o script $file.name"
+					gse.run(file.name, getNewBinding());	
 				}
     	} 
 		}

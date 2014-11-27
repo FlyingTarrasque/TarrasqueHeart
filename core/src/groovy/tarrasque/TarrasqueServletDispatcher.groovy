@@ -27,10 +27,12 @@ class TarrasqueServletDispatcher extends GroovyServlet {
   @Override
   @CompileStatic
   void init(ServletConfig config) {
+    println "Iniciando dispatcher"
     super.init(config)
     tarrasqueScript = new TarrasqueScript(createGroovyScriptEngine(), UTF8)
 
-    tarrasqueScript.buildActions("//")
+    def _servletContext = config.getServletContext()
+    tarrasqueScript.buildActions(_servletContext.getRealPath("/"))
   }
 
   //@Override
@@ -64,7 +66,7 @@ class TarrasqueServletDispatcher extends GroovyServlet {
       }
     }
 
-    String route = request.requestURI
+    String route = request.servletPath
     //response.writer.write(route)
     def action = TarrasqueScript.actions[route]
     if(action){

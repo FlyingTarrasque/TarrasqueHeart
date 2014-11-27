@@ -5,6 +5,10 @@ Hear of Tarrasque
 
 Build this item and dont fear any gank!!
 
-## Usage
+## Sample Usage
 
+cd core
+gradle sampleJar
+cd ..
+cd sample
 gradle jettyRun
