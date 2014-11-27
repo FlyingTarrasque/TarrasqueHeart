@@ -13,11 +13,14 @@ class TarrasqueScript{
 	}
 
 	void buildActions(scriptsPath){
-		println scriptsPath
+		println "Root path: $scriptsPath"
 		def dir = new File(scriptsPath)
 		dir.eachDirRecurse() { subDir ->
 			subDir.eachFileMatch(~/.*.groovy/) { file ->  
-				gse.run(file.getPath(), getNewBinding());
+				if(file.exists()){
+					println "Iniciando o script $file.path"
+					gse.run(file.path, getNewBinding());	
+				}
     	} 
 		}
 	}
@@ -29,15 +32,16 @@ class TarrasqueScript{
 	}
 
 	private Binding getNewBinding(){
-		def get = post = delete = put = {url, block ->
+		//TODO: Serparar closures baseado em seus verbos
+		def actionCallback = {url, block ->
 			createAction(url, block as Closure)
 		}
 
 		Binding binding = new Binding();
-		binding.setVariable("get", get);
-		binding.setVariable("post", post);
-		binding.setVariable("delete", delete);
-		binding.setVariable("put", put);
+		binding.setVariable("get", actionCallback);
+		binding.setVariable("post", actionCallback);
+		binding.setVariable("delete", actionCallback);
+		binding.setVariable("put", actionCallback);
 
 		return binding
 	}

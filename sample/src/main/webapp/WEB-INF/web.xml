@@ -14,9 +14,4 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     <servlet-name>TarrasqueServletDispatcher</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
-
 </web-app>

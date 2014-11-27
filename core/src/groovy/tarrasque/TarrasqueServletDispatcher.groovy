@@ -30,7 +30,7 @@ class TarrasqueServletDispatcher extends GroovyServlet {
     super.init(config)
     tarrasqueScript = new TarrasqueScript(createGroovyScriptEngine(), UTF8)
 
-    tarrasqueScript.buildActions(servletContext.getResource("/").toExternalForm())
+    tarrasqueScript.buildActions("//")
   }
 
   //@Override
@@ -42,7 +42,7 @@ class TarrasqueServletDispatcher extends GroovyServlet {
   @Override
   @CompileStatic
   void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.contentType = "text/html; charset=utf-8"
+    //response.contentType = "text/html; charset=utf-8"
 
     //Maybe put here a beforeAction
     def result = doService(request, response)
@@ -51,10 +51,8 @@ class TarrasqueServletDispatcher extends GroovyServlet {
 
   //@CompileStatic
   private static doService(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    println "Iniciando servico"
-
     def data = null
-    def ct  = request.contentType
+    def ct  = request.contentType?: ctHTML
     if (ct.startsWith(ctJSON)) {
       data = new JsonSlurper().parse(request.inputStream.newReader(UTF8))
     }else if (ct.startsWith(ctXML)) {
@@ -66,9 +64,13 @@ class TarrasqueServletDispatcher extends GroovyServlet {
       }
     }
 
-    String route = super.getScriptUri(request)
-    println route
+    String route = request.requestURI
+    //response.writer.write(route)
     def action = TarrasqueScript.actions[route]
-    return action ? action(data) : null
+    if(action){
+      response.writer.write(action(data))
+    }else{
+      response.sendError(404, "No matching Routes for $route")
+    }
   }
 }
