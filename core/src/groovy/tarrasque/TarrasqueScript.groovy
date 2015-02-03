@@ -13,16 +13,13 @@ class TarrasqueScript{
 	}
 
 	void buildActions(scriptsPath){
-		println "Root path: $scriptsPath"
 		def dir = new File(scriptsPath).getParentFile()
 		dir.eachDirRecurse() { subDir ->
-			println "Folder: $subDir.path"
-			subDir.eachFile{ file ->  
+			subDir.eachFile{ file ->
 				if(file.exists() && file.path.endsWith(".groovy")){
-					println "Iniciando o script $file.name"
-					gse.run(file.name, getNewBinding());	
+					gse.run(file.name, getNewBinding());
 				}
-    	} 
+    	}
 		}
 	}
 
